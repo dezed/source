@@ -227,6 +227,7 @@ int test_case_equal_double( test_case_t* self, double val, double expected, cons
 int test_suite_finish( test_suite_t* self )
 {
     size_t i = 0;
+    size_t j = 0;
 
 
     int npassed=0;
@@ -238,6 +239,19 @@ int test_suite_finish( test_suite_t* self )
     
         npassed += tc->npassed;
         nfailed += tc->nfailed;
+
+        if( tc->nfailed )
+        {
+            printf( "\n" );
+            for( j = 0; j < tc->nresults; ++j )
+            {
+                test_result_t* tr = tc->test_results + j;
+                if( 0 == tr->passed )
+                {
+                    printf( "%s(%d) : %s : %s : FAIL\n", tr->szfile, tr->lineno, tc->szname, tr->szexp );
+                }
+            }
+        }
 
         test_case_finish( tc );
     }
